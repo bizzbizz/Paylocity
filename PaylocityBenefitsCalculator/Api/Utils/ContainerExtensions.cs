@@ -1,6 +1,8 @@
 ﻿using Api.DAL;
 using Api.DAL.Mock;
 using Api.Models;
+using Api.SalaryCostStrategies;
+using Api.Validations;
 
 namespace Api.Utils;
 
@@ -28,6 +30,13 @@ public static class ContainerExtensions
     private static void RegisterCommonDependencies(IServiceCollection services)
     {
         services.AddSingleton<IApiResponseUtils, ApiResponseUtils>();
+        services.AddSingleton<IEmployeeValidations, EmployeeValidations>();
+
+        // add strategies here:
+        services.AddSingleton<ISalaryCostStrategy, BaseSalaryCostStrategy>();
+        services.AddSingleton<ISalaryCostStrategy, SalaryCostPerDependentStrategy>();
+        services.AddSingleton<ISalaryCostStrategy, HighPaidSalaryCostStrategy>();
+        services.AddSingleton<ISalaryCostStrategy, OldDependentsSalaryCostStrategy>();
     }
 
     private static void RegisterProductionDependencies(IServiceCollection services)
@@ -37,6 +46,8 @@ public static class ContainerExtensions
 
     private static void RegisterDevelopmentDependencies(IServiceCollection services)
     {
+        services.AddSingleton<IClock, LocalClock>();
+
         services.AddSingleton<ITable<Employee>, EmployeeMockTable>();
         services.AddSingleton<ITable<Dependent>, DependentMockTable>();
     }

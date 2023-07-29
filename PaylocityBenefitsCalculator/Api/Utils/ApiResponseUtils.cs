@@ -12,6 +12,8 @@ public interface IApiResponseUtils
     ApiResponse<TDto> CreateNotFoundResponse<TModel, TDto>(int id) where TDto : class;
     ApiResponse<TDto> CreateSuccessResponse<TDto>(TDto dto) where TDto : class;
     ApiResponse<List<TDto>> CreateSuccessResponse<TDto>(List<TDto> dtos) where TDto : class;
+    ApiResponse<TDto> CreateExceptionResponse<TDto>(Exception ex) where TDto : class;
+    ApiResponse<TDto> CreateValidationErrorResponse<TDto>(string error) where TDto : class;
 }
 
 public class ApiResponseUtils : IApiResponseUtils
@@ -38,4 +40,23 @@ public class ApiResponseUtils : IApiResponseUtils
             Data = dtos,
             Success = true
         };
+
+    public ApiResponse<TDto> CreateExceptionResponse<TDto>(Exception ex) where TDto : class
+        => new()
+        {
+            Data = null,
+            Success = false,
+            Error = "Something went wrong",
+            Message = ex.Message
+        };
+
+    public ApiResponse<TDto> CreateValidationErrorResponse<TDto>(string error) where TDto : class
+        => new()
+        {
+            Data = null,
+            Success = false,
+            Error = "Validation failed",
+            Message = error
+        };
+
 }

@@ -14,7 +14,8 @@ public class EmployeesController : ControllerBase
     private readonly ITable<Employee> _employeeTable;
     private readonly IApiResponseUtils _apiResponseUtils;
 
-    public EmployeesController(ITable<Employee> employeeTable, IApiResponseUtils apiResponseUtils)
+    public EmployeesController(ITable<Employee> employeeTable,
+        IApiResponseUtils apiResponseUtils)
     {
         _employeeTable = employeeTable;
         _apiResponseUtils = apiResponseUtils;
@@ -27,7 +28,7 @@ public class EmployeesController : ControllerBase
         var model = await _employeeTable.FindByIdOrDefaultAsync(id);
 
         var result = model == null
-            ? _apiResponseUtils.CreateNotFoundResponse<Dependent, GetEmployeeDto>(id)
+            ? _apiResponseUtils.CreateNotFoundResponse<Employee, GetEmployeeDto>(id)
             : _apiResponseUtils.CreateSuccessResponse(new GetEmployeeDto(model));
 
         return result;
