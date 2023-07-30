@@ -12,8 +12,9 @@ public interface ISalaryCostStrategy
 {
     decimal CalculateAnnualCost(Employee employee);
 
-    decimal CalculatePaycheckCost(Employee employee) =>
-        MoneyHelpers.DivideWithTwoDigitPrecision(CalculateAnnualCost(employee), 26);
+    decimal CalculatePaycheckCost(Employee employee, int bracketIndex) =>
+        MoneyHelpers.CalculateEvenlyDistributedDivision(CalculateAnnualCost(employee),
+            Constants.NumberOfBiweeklyBracketsPerYear, bracketIndex);
 
     /// <summary>
     /// Name makes the strategy human-readable in API response.

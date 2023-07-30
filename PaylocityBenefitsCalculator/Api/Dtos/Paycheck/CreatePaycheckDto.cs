@@ -20,9 +20,11 @@ public class CreatePaycheckDto
         Employee = new GetEmployeeDto(employeeModel);
         foreach (var salaryCostStrategy in salaryCostStrategies)
         {
-            PaycheckItems.Add(new CreatePaycheckItemDto(employeeModel, salaryCostStrategy));
+            PaycheckItems.Add(new CreatePaycheckItemDto(employeeModel, salaryCostStrategy, index));
         }
-        PaycheckBaseSalary = MoneyHelpers.DivideWithTwoDigitPrecision(employeeModel.Salary, 26);
+
+        PaycheckBaseSalary = MoneyHelpers.CalculateEvenlyDistributedDivision(employeeModel.Salary,
+            Constants.NumberOfBiweeklyBracketsPerYear, index);
         FinalAmount = PaycheckBaseSalary + PaycheckItems.Sum(item => item.Amount);
     }
 }
