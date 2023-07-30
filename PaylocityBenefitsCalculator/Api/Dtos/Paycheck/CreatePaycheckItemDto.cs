@@ -4,14 +4,14 @@ namespace Api.Dtos.Paycheck;
 
 public class CreatePaycheckItemDto
 {
-    public ISalaryCostStrategy? SalaryCostStrategy { get; set; }
+    public string SalaryCostStrategyName { get; set; }
     public decimal Amount { get; set; }
 
     public CreatePaycheckItemDto() { }
 
     public CreatePaycheckItemDto(Models.Employee employee, ISalaryCostStrategy salaryCostStrategy, int bracketIndex)
     {
-        SalaryCostStrategy = salaryCostStrategy;
+        SalaryCostStrategyName = salaryCostStrategy.Name;
         Amount = salaryCostStrategy.CalculatePaycheckCost(employee, bracketIndex);
     }
 }
