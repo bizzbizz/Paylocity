@@ -27,11 +27,10 @@ public class EmployeesController : ControllerBase
     {
         var model = await _employeeTable.FindByIdOrDefaultAsync(id);
 
-        var result = model == null
-            ? _apiResponseUtils.CreateNotFoundResponse<Employee, GetEmployeeDto>(id)
-            : _apiResponseUtils.CreateSuccessResponse(new GetEmployeeDto(model));
+        if (model == null)
+            return NotFound();
 
-        return result;
+        return _apiResponseUtils.CreateSuccessResponse(new GetEmployeeDto(model));
     }
 
     [SwaggerOperation(Summary = "Get all employees")]

@@ -36,11 +36,12 @@ public class PaychecksController : ControllerBase
         var model = await _employeeTable.FindByIdOrDefaultAsync(id);
         try
         {
-            return model == null
-                ? _apiResponseUtils.CreateNotFoundResponse<Employee, CreatePaycheckDto>(id)
-                : _employeeValidations.Validate(model, out var error)
-                    ? _apiResponseUtils.CreateSuccessResponse(new CreatePaycheckDto(model, idx, _salaryCostStrategies))
-                    : _apiResponseUtils.CreateValidationErrorResponse<CreatePaycheckDto>(error ?? string.Empty);
+            if (model == null)
+                return NotFound();
+
+            return _employeeValidations.Validate(model, out var error)
+                ? _apiResponseUtils.CreateSuccessResponse(new CreatePaycheckDto(model, idx, _salaryCostStrategies))
+                : _apiResponseUtils.CreateValidationErrorResponse<CreatePaycheckDto>(error ?? string.Empty);
         }
         //We are already verifying before, this is why we catch it in a general way here.
         //But now that it's possible to throw exceptions, the catch is just a safety net.

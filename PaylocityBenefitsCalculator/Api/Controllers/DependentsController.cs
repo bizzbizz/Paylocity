@@ -26,11 +26,10 @@ public class DependentsController : ControllerBase
     {
         var model = await _dependentTable.FindByIdOrDefaultAsync(id);
 
-        var result = model == null
-            ? _apiResponseUtils.CreateNotFoundResponse<Dependent, GetDependentDto>(id)
-            : _apiResponseUtils.CreateSuccessResponse(new GetDependentDto(model));
+        if (model == null)
+            return NotFound();
 
-        return result;
+        return _apiResponseUtils.CreateSuccessResponse(new GetDependentDto(model));
     }
 
     [SwaggerOperation(Summary = "Get all dependents")]

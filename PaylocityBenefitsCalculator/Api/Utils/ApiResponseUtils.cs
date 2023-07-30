@@ -9,7 +9,6 @@ namespace Api.Utils;
 /// </summary>
 public interface IApiResponseUtils
 {
-    ApiResponse<TDto> CreateNotFoundResponse<TModel, TDto>(int id) where TDto : class;
     ApiResponse<TDto> CreateSuccessResponse<TDto>(TDto dto) where TDto : class;
     ApiResponse<List<TDto>> CreateSuccessResponse<TDto>(List<TDto> dtos) where TDto : class;
     ApiResponse<TDto> CreateExceptionResponse<TDto>(Exception ex) where TDto : class;
@@ -18,15 +17,6 @@ public interface IApiResponseUtils
 
 public class ApiResponseUtils : IApiResponseUtils
 {
-    public ApiResponse<TDto> CreateNotFoundResponse<TModel, TDto>(int id) where TDto : class
-        => new()
-        {
-            Data = null,
-            Success = false,
-            Error = "Not found",
-            Message = $"Could not find {typeof(TModel)} with id: {id}."
-        };
-
     public ApiResponse<TDto> CreateSuccessResponse<TDto>(TDto dto) where TDto : class
         => new()
         {
