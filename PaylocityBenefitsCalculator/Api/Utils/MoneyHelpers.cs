@@ -4,7 +4,7 @@ public static class MoneyHelpers
 {
     public static decimal CalculateEvenlyDistributedDivision(decimal total, int numberOfBrackets, int bracketIndex)
     {
-        var estimationPerBracket = new decimal(100 * (int) total / numberOfBrackets) / 100m;
+        var estimationPerBracket = new decimal((int)(100 * total) / numberOfBrackets) / 100m;
         var totalError = total - estimationPerBracket * numberOfBrackets;
 
         // numberOfErrorCents is between 0 and numberOfBrackets
