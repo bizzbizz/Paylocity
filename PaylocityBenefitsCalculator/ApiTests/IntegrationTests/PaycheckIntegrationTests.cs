@@ -16,13 +16,13 @@ public class PaycheckIntegrationTests : IntegrationTest
         var dependent = new CreatePaycheckDto
         {
             PaycheckNumber = 0,
-            FinalAmount = 3731.27m,
+            FinalAmount = 3731.25m,
             PaycheckBaseSalary = 3552.51m,
             EmployeeId = 2,
             PaycheckItems = new List<CreatePaycheckItemDto>
             {
-                new() {SalaryCostStrategyName = nameof(BaseSalaryCostStrategy), Amount = 38.47m},
-                new() {SalaryCostStrategyName = nameof(SalaryCostPerDependentStrategy), Amount = 69.24m},
+                new() {SalaryCostStrategyName = nameof(BaseSalaryCostStrategy), Amount = 38.46m},
+                new() {SalaryCostStrategyName = nameof(SalaryCostPerDependentStrategy), Amount = 69.23m},
                 new() {SalaryCostStrategyName = nameof(HighPaidSalaryCostStrategy), Amount = 71.05m},
                 new() {SalaryCostStrategyName = nameof(OldDependentsSalaryCostStrategy), Amount = 0},
             }
