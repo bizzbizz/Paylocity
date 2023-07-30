@@ -21,7 +21,7 @@ public class MoneyHelperTest
         decimal total, int numberOfBrackets, int bracketIndex, decimal expectedResult)
     {
         var actualResult = MoneyHelpers.CalculateEvenlyDistributedDivision(total, numberOfBrackets, bracketIndex);
-        Assert.Equal(actualResult, expectedResult);
+        Assert.Equal(expectedResult, actualResult);
     }
     
 }
