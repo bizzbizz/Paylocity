@@ -52,7 +52,7 @@ public class OldDependentsSalaryCostStrategy : ISalaryCostStrategy
 {
     private readonly IClock _clock;
     private const int OldAgeThreshold = 50;
-    private const int OldAgeCost = 50;
+    private const decimal OldAgeCost = 200m;
 
     public OldDependentsSalaryCostStrategy(IClock clock)
     {
