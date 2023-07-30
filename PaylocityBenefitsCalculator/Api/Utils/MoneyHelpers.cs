@@ -16,7 +16,10 @@ public static class MoneyHelpers
         // borrow tells us every how many brackets we need to give back a cent
         var borrow = numberOfBrackets / numberOfErrorCents;
         // are we giving back a cent in this bracket?
-        var isBorrow = bracketIndex % borrow == 0;
+        var isBorrow = bracketIndex % borrow == borrow - 1;
+
+        if (numberOfBrackets % numberOfErrorCents == 0 && bracketIndex == numberOfBrackets - 1)
+            isBorrow = true;
 
         return estimationPerBracket + (isBorrow ? 0.01m : 0m);
     }
