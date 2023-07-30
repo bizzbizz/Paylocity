@@ -40,3 +40,13 @@ There is no model and no mock data behind paycheck. There is only `DTO` for crea
 - `PaycheckItems` = a collection of additional costs, each of which has a name and amount.
   - e.g. `{BaseCostSalaryStrategy, 600.00}`
 - `FinalAmount` = `PaycheckBaseSalary` + sum of `PaycheckItems`.
+
+## Evenly distribution
+
+The way it works is that we estimate how much salary goes to each bracket in general.
+Then we calculate how much is remaining as error.
+Then we compensate if we're in the right bracket.
+
+We compensate in the latest bracket possible.
+e.g. if there is an error of one cent, we pay it at the end of the year.
+or if there is an error of two cents, we pay it once in the middle and once at the end of the year.
