@@ -1,25 +1,42 @@
-# What is this?
+# Note to reviewers:
 
-A project seed for a C# dotnet API ("PaylocityBenefitsCalculator").  It is meant to get you started on the Paylocity BackEnd Coding Challenge by taking some initial setup decisions away.
+The solution works with mock data and it's covered by UTs, with a focus on math and extensibility.
+I've added comments in code about certain parts that needs explaining the decision.
 
-The goal is to respect your time, avoid live coding, and get a sense for how you work.
+I'm referring to the biweek as "bracket". So we have 26 brackets per year.
+I'm assuming the money has always two precision points. e.g. `$123.45`
 
-# Coding Challenge
+## Utils directory
 
-**Show us how you work.**
+Probably not the best approach for all the classes here, but I'm trying to keep it simple and fast.
+So I'm using extensions to keep the code small.
 
-Each of our Paylocity product teams operates like a small startup, empowered to deliver business value in
-whatever way they see fit. Because our teams are close knit and fast moving it is imperative that you are able
-to work collaboratively with your fellow developers. 
+- `ContainerExtensions` : Registered all IoC dependencies here. (Only for API project)
+- `ApiResponseUtils` : I assume we have something like this in our infrastructure for DRY
+- `Clock` : I assumed we can't rely on local time in production (I don't know about paylocity's app specs)
+- `DependentExtensions` : To calculate age -> we should have better utils for this
+- `EmployeeExtensions` : To identify invalid data -> probably the ugliest part of my code!
+- `MoneyHelpers` : basically math utils
 
-This coding challenge is designed to allow you to demonstrate your abilities and discuss your approach to
-design and implementation with your potential colleagues. You are free to use whatever technologies you
-prefer but please be prepared to discuss the choices you’ve made. We encourage you to focus on creating a
-logical and functional solution rather than one that is completely polished and ready for production.
+## Strategies
 
-The challenge can be used as a canvas to capture your strengths in addition to reflecting your overall coding
-standards and approach. There’s no right or wrong answer.  It’s more about how you think through the
-problem. We’re looking to see your skills in all three tiers so the solution can be used as a conversation piece
-to show our teams your abilities across the board.
+I used strategy pattern for calculating salary costs. I think it's the right pattern.
+The interface `ISalaryCostStrategy` requires an implementation of `CalculateAnnualCost`.
+The interface calculates the costs for each bracket itself (It's C#11 feature I think).
 
-Requirements will be given separately.
+All strategies are registered in IoC, we just pass an `IEnumerable<ISalaryCostStrategy>` to `PaychecksController`.
+
+## /paychecks/id/idx
+
+I've added a new endpoint called "paychecks" and it only creates a new paycheck for an employee id (returns 404 if employee didn't exist) and a given bracket index (which should be less than 26 but no validations here).
+
+There is no model and no mock data behind paycheck. There is only `DTO` for creating it.
+
+## CreatePaycheckDto
+
+`CreatePaycheckDto` has:
+
+- `PaycheckBaseSalary` = `AnnualSalary` divided by bracket count and adjusted evenly throughout the year.
+- `PaycheckItems` = a collection of additional costs, each of which has a name and amount.
+  - e.g. `{BaseCostSalaryStrategy, 600.00}`
+- `FinalAmount` = `PaycheckBaseSalary` + sum of `PaycheckItems`.
