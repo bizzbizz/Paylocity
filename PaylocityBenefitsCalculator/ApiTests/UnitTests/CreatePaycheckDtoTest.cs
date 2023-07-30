@@ -24,11 +24,17 @@ public class CreatePaycheckDtoTest
     public void CreatePaycheckDtoConstructor()
     {
         const decimal salaryPerBracket = 100m;
-        var employee = new Employee {Salary = salaryPerBracket * Constants.NumberOfBiweeklyBracketsPerYear};
+        var employee = new Employee
+        {
+            Id = 1,
+            Salary = salaryPerBracket * Constants.NumberOfBiweeklyBracketsPerYear
+        };
 
         var dto = new CreatePaycheckDto(employee, 1, Strategies);
-        Assert.Equal(salaryPerBracket, dto.PaycheckBaseSalary);
+
         Assert.Equal(1, dto.PaycheckNumber);
+        Assert.Equal(1, dto.EmployeeId);
+        Assert.Equal(salaryPerBracket, dto.PaycheckBaseSalary);
         Assert.Equal(salaryPerBracket + TestBaseSalaryCostStrategy.FixedAmountPerBracket * Strategies.Count(),
             dto.FinalAmount);
     }
